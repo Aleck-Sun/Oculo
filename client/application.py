@@ -17,8 +17,6 @@ WHITE = (255,255,255)
 
 clock = pygame.time.Clock()
 crashed = False
-carImg = pygame.image.load('racecar.png')
-
 
 # Setup google cloud text to speech platform
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "serviceAccount.json"
@@ -44,19 +42,26 @@ def APIinterfacer(url, blob : bytes) -> str:
     with open(fileName, "wb") as out:
         out.write(audio)
     
-    # Play the audio here and wait until it's done playing (TODO)
+    return fileName
+
+# Comvert image to pygameimage
+def convertImage(image):
+    return pygame.image.frombuffer(image.tostring(), image.shape[1::-1], "RGB")
 
 vid = cv2.VideoCapture(0)
 def main():
     # Read frames
-    while(True):
+    Stopped = False
+    while(not Stopped):
+        # Capture frame-by-frame
         _, frame = vid.read()
-        
         screen.fill(WHITE)
         
+        # Display the resulting frame
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        frame = frame.swapaxes(0, 1)
-        pygame.surfarray.blit_array(screen, frame)
+        image = convertImage(frame)
+        
+        screen.blit(image, (0,0))
             
         pygame.display.update()
         clock.tick(60)
@@ -64,9 +69,10 @@ def main():
         # Take a snapshot and send to API
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                exit(0)
-        
-        
+                Stopped = True
+            # get mouse pressed
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                f = APIinterfacer("http://localhost:5000/api/classify", frame)
     vid.release()
     pygame.quit()
     
