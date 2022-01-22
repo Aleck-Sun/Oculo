@@ -6,3 +6,5 @@ data/fifty_dollar_bills
 data/hundred_dollar_bills
 
 server/__pychache__
+client/__pychache__
+server/serviceAccount.json
