@@ -11,5 +11,5 @@ def main():
 
 @app.route("/api/v0/classifyImage", methods=['POST'])
 def classifyImage():
-    print(request.data)
+    print(request.files['file'].filename)
     return "We return the dollar bill here"
