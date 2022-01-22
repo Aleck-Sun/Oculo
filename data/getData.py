@@ -47,6 +47,6 @@ def downloadImages(driver, searchTerm):
         except:
             pass
 
-searchTerms = ["one dollar us bill", "two dollar us bill", "five dollar us bill", "ten dollar us bill", "twenty dollar us bill", "fifty dollar us bill", "hundred dollar us bill"]
+searchTerms = ["one dollar us bill", "five dollar us bill", "ten dollar us bill", "twenty dollar us bill", "fifty dollar us bill", "hundred dollar us bill"]
 for searchTerm in searchTerms:
     startDriver(searchTerm)
