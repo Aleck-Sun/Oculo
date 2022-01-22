@@ -2,6 +2,23 @@ import os
 import cv2
 import requests
 from google.cloud import texttospeech_v1
+import pygame
+
+pygame.init()
+
+display_width = 800
+display_height = 600
+
+screen = pygame.display.set_mode((display_width,display_height))
+pygame.display.set_caption('Money Bill Recognition')
+
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+
+clock = pygame.time.Clock()
+crashed = False
+carImg = pygame.image.load('racecar.png')
+
 
 # Setup google cloud text to speech platform
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "serviceAccount.json"
@@ -28,23 +45,30 @@ def APIinterfacer(url, blob : bytes) -> str:
         out.write(audio)
     
     # Play the audio here and wait until it's done playing (TODO)
-    
+
 vid = cv2.VideoCapture(0)
 def main():
     # Read frames
     while(True):
         _, frame = vid.read()
-        cv2.imshow('frame', frame)
+        
+        screen.fill(WHITE)
+        
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = frame.swapaxes(0, 1)
+        pygame.surfarray.blit_array(screen, frame)
+            
+        pygame.display.update()
+        clock.tick(60)
         
         # Take a snapshot and send to API
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            _, buffer = cv2.imencode('.jpg', frame)
-            APIinterfacer("http://localhost:5000/api/v0/classifyImage", buffer)
-            break
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit(0)
         
         
     vid.release()
-    cv2.destroyAllWindows()
+    pygame.quit()
     
 if __name__ == '__main__':
     main()
