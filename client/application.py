@@ -6,7 +6,13 @@ import base64
 vid = cv2.VideoCapture(0)
 
 def APIinterfacer(url, blob : bytes) -> str:
-    r = requests.post(url, data=blob)
+    files = {
+        'file': ("moneyBill.jpg", blob),
+        'Content-Type': 'image/jpeg',
+        'Content-Length': 1
+    }
+    
+    r = requests.post(url, files=files)
     print(r.status_code, r.content)
     return r.content.decode('utf-8')
     
@@ -14,16 +20,15 @@ def APIinterfacer(url, blob : bytes) -> str:
 def main():
     while(True):
         
-        ret, frame = vid.read()
+        _, frame = vid.read()
         
         cv2.imshow('frame', frame)
         
         
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            ret, buffer = cv2.imencode('.jpg', frame)
-            tojpeg = base64.b64encode(buffer)
+            _, buffer = cv2.imencode('.jpg', frame)
             
-            print(APIinterfacer("http://localhost:5000/api/v0/classifyImage", tojpeg))
+            print(APIinterfacer("http://localhost:5000/api/v0/classifyImage", buffer))
             break
         
         
