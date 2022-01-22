@@ -1,12 +1,14 @@
 import cv2
 import requests
 import time
+import base64
 
 vid = cv2.VideoCapture(0)
 
 def APIinterfacer(url, blob : bytes) -> str:
     r = requests.post(url, data=blob)
-    return "5 Dollars" 
+    print(r.status_code, r.content)
+    return r.content.decode('utf-8')
     
 
 def main():
@@ -18,7 +20,12 @@ def main():
         
         
         if cv2.waitKey(1) & 0xFF == ord('q'):
+            ret, buffer = cv2.imencode('.jpg', frame)
+            tojpeg = base64.b64encode(buffer)
+            
+            print(APIinterfacer("http://localhost:5000/api/v0/classifyImage", tojpeg))
             break
+        
         
     vid.release()
     
