@@ -5,3 +5,11 @@ It's easy to imagine how hard simple tasks in life can become once we lose our v
 Our application is built with OpenCV and Python. To use the app, point the device camera towards a bill. Tap anywhere on the screen to classify the bill amount. The application will make an api call to our model and return the amount of money. It will then use Google Cloud's text-to-speech API to return an audio recording of the classification and return it to the user.
 ## Demo
 The demo can be found [here](https://www.youtube.com/watch?v=X9MqpVZQu6s&t=5s&ab_channel=AleckSun)
+## API
+Our API will return a string of the classification of the base64 image sent to it through a post request
+```http
+POST http://172.105.103.43:5000/api/v0/classifyImage
+```
+| Response | Post Body |
+| :--- | :--- |
+| `string` | `base64 image` |
