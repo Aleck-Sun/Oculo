@@ -17,5 +17,5 @@ def classifyImage():
     print(request.files['file'].filename)
 
     # Identify image classification (TODO)
-    text = "five dollar bill"
+    text = "twenty dollar bill"
     return text
