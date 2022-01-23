@@ -1,35 +1,23 @@
+from fileinput import filename
 import os
 import cv2
 import requests
 from google.cloud import texttospeech_v1
 import pygame
+from pygame import mixer
 import pyttsx3
-from fastai.vision.all import *
 
-# Load model
-model = load_learner('../server/export.pkl')
-
+# Setup PyGame
 engine = pyttsx3.init()
-
-# import required module
-import simpleaudio as sa
-
 pygame.init()
-
-print(pygame.__file__)
 
 display_width = 800
 display_height = 600
-
 screen = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('Money Bill Recognition')
 
 BLACK = (0,0,0)
-
 WHITE = (255,255,255)
-
-clock = pygame.time.Clock()
-crashed = False
 
 # Setup google cloud text to speech platform
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "serviceAccount.json"
@@ -49,19 +37,17 @@ def APIinterfacer(url, blob : bytes) -> str:
     text = texttospeech_v1.SynthesisInput(text=text)
     response = client.synthesize_speech(input=text, voice=voice, audio_config=audio_config)
     audio = response.audio_content
-    fileName = "output.wav"
+    fileName = "classification.mp3"
     
-    
-    # The response's audio_content is binary.
     with open(fileName, 'wb') as out:
         # Write the response to the output file.
         out.write(audio)
-        print('Audio content written to file "output.mp3"')
         out.close()
-        
-    # Play audio file
-    engine.say(text)
-    engine.runAndWait()
+    
+    # Play file
+    mixer.init()
+    mixer.music.load(fileName)
+    mixer.music.play()
     
 # Comvert image to pygameimage
 def convertImage(image):
@@ -70,9 +56,10 @@ def convertImage(image):
 vid = cv2.VideoCapture(0)
 def main():
     # Read frames
+    clock = pygame.time.Clock()
     pygame.init()
     Stopped = False
-    while(not Stopped):
+    while not Stopped:
         # Capture frame-by-frame
         _, frame = vid.read()
         screen.fill(WHITE)
@@ -80,9 +67,7 @@ def main():
         # Display the resulting frame
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         image = convertImage(frame)
-        
         screen.blit(image, (0,0))
-            
         pygame.display.update()
         clock.tick(60)
         
@@ -90,11 +75,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 Stopped = True
-            # get mouse pressed
             if event.type == pygame.MOUSEBUTTONDOWN:
-                classification, _, _ = model.predict(frame)
-                engine.say(classification.replace("_", ""))
-                engine.runAndWait()
+                APIinterfacer("http://localhost:5000/api/v0/classifyImage", frame)
 
     vid.release()
     pygame.quit()
