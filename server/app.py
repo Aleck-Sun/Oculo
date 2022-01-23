@@ -12,7 +12,7 @@ CORS(app, supports_credentials=True)
 
 @app.route("/")
 def main():
-    return "Server Running"
+    return "Server Running hi"
 
 @app.route("/api/v0/classifyImage", methods=['POST'])
 def classifyImage():
@@ -21,5 +21,5 @@ def classifyImage():
     classification, _, probability = model.predict(file)
     print("Bill:", classification, "Confidence", probability)
 
-    classification = classification.replace("_", "")
+    classification = classification.replace("_", " ")
     return classification
