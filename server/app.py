@@ -16,16 +16,10 @@ def main():
 
 @app.route("/api/v0/classifyImage", methods=['POST'])
 def classifyImage():
-    # Grab image file from request
-    print(request.files['file'].filename)
-
     # Identify image classification
-    classification, _, probability = model.predict(files['file'])
+    file = request.files['file']
+    classification, _, probability = model.predict(file)
     print("Bill:", classification, "Confidence", probability)
 
-    # Check to see if model is confident
-    text = "Unknown bill amount, please rescan"
-    if probability > 0.7:
-        text = classification
-
-    return text
+    classification = classification.replace("_", "")
+    return classification
