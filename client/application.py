@@ -32,6 +32,8 @@ def APIinterfacer(url, blob : bytes) -> str:
     # Get classification from server
     response = requests.post(url, files=files)
     text = response.text
+    
+    print(text)
 
     # Get audio file from google cloud
     text = texttospeech_v1.SynthesisInput(text=text)
