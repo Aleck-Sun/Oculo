@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Oculo",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
