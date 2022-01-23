@@ -61,7 +61,6 @@ context.fill();
 context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
 canvas.addEventListener('touchend', function(ev) {
-
     console.log("Event");
     let imageData = canvas.toDataURL("image/jepg");
 
@@ -83,7 +82,6 @@ canvas.addEventListener('touchend', function(ev) {
 canvas.addEventListener ( "click", function ( ) {
                 let imageData = canvas.toDataURL("image/jepg");
 
-                context.rect(0, 0, 50, 50);
 
                 var httpPost = new XMLHttpRequest();
                 httpPost.open("POST", "http://172.105.103.43:5000/api/v0/classifyImage", true);
