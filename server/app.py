@@ -26,7 +26,6 @@ def main():
 def classifyImage():
     #Identify image classification
     data = json.loads(request.data.decode("ascii"))['file']
-    im = Image.open(BytesIO(base64.b64decode(data[22:])))
     classification, _, probability = model.predict(base64.b64decode(data[22:]))
     print("Bill:", classification, "Confidence", probability)
 
