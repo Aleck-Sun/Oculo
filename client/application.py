@@ -3,8 +3,16 @@ import cv2
 import requests
 from google.cloud import texttospeech_v1
 import pygame
+import pyttsx3
+
+engine = pyttsx3.init()
+
+# import required module
+import simpleaudio as sa
 
 pygame.init()
+
+print(pygame.__file__)
 
 display_width = 800
 display_height = 600
@@ -13,6 +21,7 @@ screen = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('Money Bill Recognition')
 
 BLACK = (0,0,0)
+
 WHITE = (255,255,255)
 
 clock = pygame.time.Clock()
@@ -36,14 +45,20 @@ def APIinterfacer(url, blob : bytes) -> str:
     text = texttospeech_v1.SynthesisInput(text=text)
     response = client.synthesize_speech(input=text, voice=voice, audio_config=audio_config)
     audio = response.audio_content
-    fileName = "classification.mp3"
-
-    # Save speech
-    with open(fileName, "wb") as out:
-        out.write(audio)
+    fileName = "output.wav"
     
-    return fileName
-
+    
+    # The response's audio_content is binary.
+    with open(fileName, 'wb') as out:
+        # Write the response to the output file.
+        out.write(audio)
+        print('Audio content written to file "output.mp3"')
+        out.close()
+        
+    # Play audio file
+    engine.say(text)
+    engine.runAndWait()
+    
 # Comvert image to pygameimage
 def convertImage(image):
     return pygame.image.frombuffer(image.tostring(), image.shape[1::-1], "RGB")
@@ -51,6 +66,7 @@ def convertImage(image):
 vid = cv2.VideoCapture(0)
 def main():
     # Read frames
+    pygame.init()
     Stopped = False
     while(not Stopped):
         # Capture frame-by-frame
@@ -72,7 +88,7 @@ def main():
                 Stopped = True
             # get mouse pressed
             if event.type == pygame.MOUSEBUTTONDOWN:
-                f = APIinterfacer("http://localhost:5000/api/classify", frame)
+                f = APIinterfacer("http://localhost:5000/api/v0/classifyImage", frame)
     vid.release()
     pygame.quit()
     
