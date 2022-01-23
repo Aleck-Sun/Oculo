@@ -1,10 +1,13 @@
-data/one_dollar_bills
-data/five_dollar_bills
-data/ten_dollar_bills
-data/twenty_dollar_bills
-data/fifty_dollar_bills
-data/hundred_dollar_bills
+oldModel/one_dollar_bills
+oldModel/five_dollar_bills
+oldModel/ten_dollar_bills
+oldModel/twenty_dollar_bills
+oldModel/fifty_dollar_bills
+oldModel/hundred_dollar_bills
 
 server/__pychache__
 client/__pychache__
 client/serviceAccount.json
+
+webclient/node_modules
+webclient/package-lock.json
