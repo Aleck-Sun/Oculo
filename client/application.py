@@ -4,7 +4,6 @@ import requests
 from google.cloud import texttospeech_v1
 import pygame
 import pyttsx3
-
 from fastai.vision.all import *
 
 # Load model
@@ -45,8 +44,6 @@ def APIinterfacer(url, blob : bytes) -> str:
     # Get classification from server
     response = requests.post(url, files=files)
     text = response.text
-    
-    print(text)
 
     # Get audio file from google cloud
     text = texttospeech_v1.SynthesisInput(text=text)
@@ -95,10 +92,10 @@ def main():
                 Stopped = True
             # get mouse pressed
             if event.type == pygame.MOUSEBUTTONDOWN:
-                
-                classification, _, probability = model.predict(frame)
-                print("Bill:", classification, "Confidence", probability)
-                f = APIinterfacer("http://localhost:5000/api/v0/classifyImage", frame)
+                classification, _, _ = model.predict(frame)
+                engine.say(classification.replace("_", ""))
+                engine.runAndWait()
+
     vid.release()
     pygame.quit()
     
