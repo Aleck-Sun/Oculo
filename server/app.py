@@ -12,7 +12,7 @@ CORS(app, supports_credentials=True)
 
 @app.route("/")
 def main():
-    return "Server Running"
+    return "Server Running v 1.0"
 
 @app.route("/api/v0/classifyImage", methods=['POST'])
 def classifyImage():
@@ -29,3 +29,5 @@ def classifyImage():
         text = classification
 
     return text
+
+app.run()
