@@ -1,17 +1,22 @@
 import os
 import base64
+import pathlib
+import platform
 from flask import Flask
 from flask import request, send_file
 from flask_cors import CORS
-from fastai.vision.all import *
+from fastai.vision.all import load_learner
 from google.cloud import texttospeech_v1
+
+plt = platform.system()
+if plt == 'Linux': pathlib.WindowsPath = pathlib.PosixPath
 
 # Load model
 model = load_learner('export.pkl')
 
 # Create server
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, support_credentials=True)
 
 # Setup google cloud text to speech platform
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "serviceAccount.json"
@@ -29,7 +34,7 @@ def classifyImage():
     # Identify image classification
     file = request.json
     classification, _, _ = model.predict(base64.b64decode(file))
-    classification = classification.replace("_", "")
+    classification = classification.replace("_", "")[:-1]
     text = classification
     text = texttospeech_v1.SynthesisInput(text=text)
 

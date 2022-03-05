@@ -33,10 +33,9 @@ const Camera = () => {
             body: JSON.stringify(imageFile)
         };
 
-        const response = await fetch('http://localhost:5000/api/v0/classifyImage', options);
+        const response = await fetch('https://oculo.herokuapp.com/api/v0/classifyImage', options);
         const blob = await response.blob();
         var audioURL = URL.createObjectURL(blob);
-        console.log(audioURL);
         playAudio(audioURL);
     };
 
