@@ -19,7 +19,7 @@ Our app also supports changing camera modes. Users can double click anywhere to 
 The frontend is built with React and Kotlin. The backend is built with Flask and Google Cloud. The model was built using PyTorch and data was collected using Selenium and Microsoft Azure Bing API.
 
 ## API
-Our API will return a audio blob of the classification of the base64 image sent to it through a post request
+Our API will return an audio blob of the classification of the base64 image sent to it through a post request
 ```http
 POST https://oculo.herokuapp.com/api/v0/classifyImage
 ```
