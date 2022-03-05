@@ -1,0 +1,5 @@
+fastai==2.5.3
+Flask==2.0.2
+Flask_Cors==3.0.10
+protobuf==3.19.4
+gunicorn==20.1.0

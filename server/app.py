@@ -41,3 +41,6 @@ def classifyImage():
 
     # return classification
     return send_file("output.mp3")
+
+if __name__ == "__main__":
+    app.run()
