@@ -2,7 +2,7 @@
 Oculo is a cross-platform application built to help the visually impaired identify money amounts and have them read out loud for them. The app can be accessed on the web [here](https://oculo.netlify.app/) and mobile [here.]()
 <br>
 <br>
-**Note:** The API takes ~1 min for the first classification, and afterwards should take about 1-5 sec for each classification
+**Note:** The API takes ~1 min for the first classification and afterwards should take about 1-5 sec for each classification
 
 ## Demo
 > **Devpost:** https://devpost.com/software/oculo<br/>
