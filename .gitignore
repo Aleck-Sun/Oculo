@@ -1,8 +1,0 @@
-model2/data/
-
-__pychache__/
-client/serviceAccount.json
-
-webclient/node_modules
-webclient/package-lock.json
-node_modules/

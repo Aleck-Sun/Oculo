@@ -1,13 +1,13 @@
-from flask import Flask
-from flask import request
-from flask_cors import CORS
-from fastai.vision.all import *
+import os
 import base64
-import json
-from PIL import Image
-from io import BytesIO
-
 import pathlib
+import platform
+from flask import Flask
+from flask import request, send_file
+from flask_cors import CORS
+from fastai.vision.all import load_learner
+from google.cloud import texttospeech_v1
+
 plt = platform.system()
 if plt == 'Linux': pathlib.WindowsPath = pathlib.PosixPath
 
@@ -16,18 +16,36 @@ model = load_learner('export.pkl')
 
 # Create server
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, support_credentials=True)
+
+# Setup google cloud text to speech platform
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "serviceAccount.json"
+client = texttospeech_v1.TextToSpeechClient()
+gender = texttospeech_v1.SsmlVoiceGender.NEUTRAL
+voice = texttospeech_v1.VoiceSelectionParams(language_code="en-US", ssml_gender=gender)
+audio_config = texttospeech_v1.AudioConfig(audio_encoding=texttospeech_v1.AudioEncoding.MP3)
 
 @app.route("/")
 def main():
-    return "Server Running v 1.2"
+    return "Server running"
 
 @app.route("/api/v0/classifyImage", methods=['POST'])
 def classifyImage():
-    #Identify image classification
-    data = json.loads(request.data.decode("ascii"))['file']
-    classification, _, probability = model.predict(base64.b64decode(data[22:]))
-    print("Bill:", classification, "Confidence", probability)
+    # Identify image classification
+    file = request.json
+    classification, _, _ = model.predict(base64.b64decode(file))
+    classification = classification.replace("_", "")[:-1]
+    text = classification
+    text = texttospeech_v1.SynthesisInput(text=text)
 
-    classification = classification.replace("_", "")
-    return classification
+    # Google text-to-speech
+    response = client.synthesize_speech(input=text, voice=voice, audio_config=audio_config)
+    with open('output.mp3', 'wb') as out:
+        out.write(response.audio_content)
+        out.close()
+
+    # return classification
+    return send_file("output.mp3")
+
+if __name__ == "__main__":
+    app.run()

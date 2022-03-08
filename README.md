@@ -1,15 +1,31 @@
 # Oculo
-## Overview
-It's easy to imagine how hard simple tasks in life can become once we lose our vision. Well, Orbis reports **43 million people** globally live with blindness. For these people, out of Ranker's 14 most common problems they face when being blind, two of them involve money. Thus, we created an application to allow the visually impaired to identify money amounts. Users will use a phone app that classifies money bills and reads out money bill values.
-## Interface
-Our application is built with OpenCV and Python. To use the app, point the device camera towards a bill. Tap anywhere on the screen to classify the bill amount. The application will make an api call to our model and return the amount of money. It will then use Google Cloud's text-to-speech API to return an audio recording of the classification and return it to the user.
+Oculo is a cross-platform application built to help the visually impaired identify money amounts and have them read out loud for them. The app can be accessed on the web [here.](https://oculo.netlify.app/)
+<br>
+<br>
+**Note:** The API takes ~1 min for the first classification and afterwards should take about 1-5 sec for each classification
+
 ## Demo
-The demo can be found [here](https://www.youtube.com/watch?v=X9MqpVZQu6s&t=5s&ab_channel=AleckSun)
+> **Devpost:** https://devpost.com/software/oculo<br/>
+> **Video Demo:** https://youtu.be/ofKQCttylZs
+
+<img src="client/web/src/Images/demo.gif" width="678" height="409"/>
+
+## Inspiration
+During a conversation with a US friend, we found out that US bills don't have brailles, unlike Canada. We wondered how in the world blind people in the US deal with money. So we did some research and found Orbis reports **43 million people** globally live with blindness. For these people, out of Ranker's 14 most common problems they face when being blind, two of them involve money. Thus, we created Oculo to help the visually impaired identify money amounts.
+
+## How it works
+The client is built to be super straightforward and simple for blind people to use. Users just have to point the device camera towards a bill, then tap anywhere on the screen to classify the bill amount. The application will make an api call to our backend. The backend identifies the bill amount using our model, then uses Google Cloud's text-to-speech API to return the amount of money in an audio format. The client receives the audio and plays it to the user.
+
+Our app also supports changing camera modes. Users can double click anywhere to change from rear to front camera and vice versa. When changing, the app plays an audio prompt to let the user know which camera mode they are in.
+
+**Technology:**<br/>
+The frontend is built with React. The backend is built with Flask and Google Cloud. The model was built using PyTorch and data was collected using Selenium and Microsoft Azure Bing API.
+
 ## API
-Our API will return a string of the classification of the base64 image sent to it through a post request
+Our API will return an audio blob of the classification of the base64 image sent to it through a post request
 ```http
-POST http://172.105.103.43:5000/api/v0/classifyImage
+POST https://oculo.herokuapp.com/api/v0/classifyImage
 ```
 | Response | Post Body |
 | :--- | :--- |
-| `string` | `base64 image` |
+| `blob` | `base64 image` |

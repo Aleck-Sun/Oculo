@@ -1,0 +1,28 @@
+.wrapper {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255,0,61,255);
+}
+
+.logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    margin-top: -150px;
+    margin-left: -150px;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 2.5s, opacity 2.5s linear;
+}
+
+.hidden-image {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.1s, opacity 0.1s linear;
+}

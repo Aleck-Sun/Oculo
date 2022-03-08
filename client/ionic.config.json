@@ -1,7 +1,0 @@
-{
-  "name": "New Ionic App",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "vue"
-}

@@ -1,0 +1,10 @@
+Flask==2.0.2
+Flask_Cors==3.0.10
+protobuf==3.19.4
+fastai==2.5.3
+--find-links https://download.pytorch.org/whl/torch_stable.html
+torch==1.10.1+cpu
+--find-links https://download.pytorch.org/whl/torch_stable.html
+torchvision==0.11.2+cpu
+gunicorn==20.1.0
+google-cloud-texttospeech==2.9.1
